@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: votell-web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/web/Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_ELEVENLABS_HOTEL_AGENT_ID
+        value: agent_1901kxnm7vzwe1xvhrqeq5knzd1n
+      - key: ELEVENLABS_HOTEL_AGENT_ID
+        value: agent_1901kxnm7vzwe1xvhrqeq5knzd1n
+      - key: ELEVENLABS_API_KEY
+        sync: false
+
+  - type: web
+    name: votell-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: ./apps/api
+    healthCheckPath: /healthz
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEMO_MODE
+        value: "true"
+      - key: WEB_URL
+        fromService:
+          type: web
+          name: votell-web
+          property: host
+      - key: API_URL
+        fromService:
+          type: web
+          name: votell-api
+          property: host
+      - key: CORS_ORIGINS
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: WEBHOOK_SIGNING_SECRET
+        generateValue: true
+      - key: TELEPHONY_PROVIDER
+        value: mock
+      - key: STT_PROVIDER
+        value: mock
+      - key: TTS_PROVIDER
+        value: mock
+      - key: LLM_PROVIDER
+        value: mock
+      - key: ELEVENLABS_HOTEL_AGENT_ID
+        value: agent_1901kxnm7vzwe1xvhrqeq5knzd1n
+      - key: ELEVENLABS_API_KEY
+        sync: false

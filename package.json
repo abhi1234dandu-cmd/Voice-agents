@@ -1,0 +1,27 @@
+{
+  "name": "votell",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Votell multi-tenant AI voice-agent platform MVP.",
+  "workspaces": [
+    "apps/web",
+    "packages/shared-types",
+    "packages/provider-contracts"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @votell/web",
+    "build": "npm run build -w @votell/web",
+    "lint": "npm run lint -w @votell/web",
+    "typecheck": "npm run typecheck -w @votell/shared-types && npm run typecheck -w @votell/provider-contracts && npm run typecheck -w @votell/web",
+    "test": "npm run test -w @votell/web",
+    "format": "npm run format -w @votell/web",
+    "api:dev": "cd apps/api && uvicorn app.main:app --reload --port 8000",
+    "api:test": "pytest apps/api/tests",
+    "seed": "python3 apps/api/scripts/seed.py"
+  },
+  "engines": {
+    "node": ">=20.11.0",
+    "npm": ">=10.0.0",
+    "python": ">=3.11"
+  }
+}
